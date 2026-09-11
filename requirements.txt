@@ -1,0 +1,20 @@
+# Базовые
+numpy
+pandas
+matplotlib
+pyyaml
+python-dotenv
+tqdm
+scikit-learn
+
+# Аудио
+librosa
+soundfile
+
+# ML / DL
+torch
+torchaudio
+transformers
+
+# Загрузка датасетов
+kaggle

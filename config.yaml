@@ -1,0 +1,43 @@
+project:
+  name: "synthetic-speech-detection"
+  description: "Исследование методов обнаружения синтезированной речи в задачах голосовой аутентификации"
+  seed: 42
+
+paths:
+  data_dir: "./data"
+  raw_dir: "./data/raw"
+  processed_dir: "./data/processed"
+  features_dir: "./data/features"
+  models_dir: "./models"
+  logs_dir: "./logs"
+  hf_cache_dir: "./hf_cache"
+
+dataset:
+  # Kaggle slug вида "owner/dataset-name" — часть URL после kaggle.com/datasets/
+  kaggle_slug: "awsaf49/asvpoof-2019-dataset"
+  download: true
+  unzip: true
+
+huggingface:
+  # Зеркало HuggingFace Hub
+  mirror_endpoint: "https://hf-mirror.com"
+  cache_dir: "./hf_cache"
+  # Базовая модель которую можно подменить в случае чего
+  default_model_id: "facebook/wav2vec2-base"
+
+audio:
+  sample_rate: 16000
+  n_mfcc: 40
+  n_mels: 80
+  duration_sec: 4.0
+  max_audio_files_preview: 3
+
+training:
+  batch_size: 32
+  num_epochs: 20
+  learning_rate: 0.0001
+  device: "cuda"  # заменится на "cpu", если cuda недоступна
+  num_workers: 2
+
+logging:
+  level: "INFO"

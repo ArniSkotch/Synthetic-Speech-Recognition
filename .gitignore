@@ -1,0 +1,17 @@
+# Секреты
+.env
+
+# Данные и кэши
+data/
+hf_cache/
+models/
+logs/
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Системные
+.DS_Store
