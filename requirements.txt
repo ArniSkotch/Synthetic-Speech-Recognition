@@ -1,3 +1,6 @@
+# Сам Jupyter Notebook
+notebook
+
 # Базовые
 numpy
 pandas
