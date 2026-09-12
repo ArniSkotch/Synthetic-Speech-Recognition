@@ -11,12 +11,28 @@ paths:
   models_dir: "./models"
   logs_dir: "./logs"
   hf_cache_dir: "./hf_cache"
+  results_dir: "./results"
 
 dataset:
   # Kaggle slug вида "owner/dataset-name" — часть URL после kaggle.com/datasets/
   kaggle_slug: "awsaf49/asvpoof-2019-dataset"
   download: true
   unzip: true
+  # Parquet-зеркало на HuggingFace для потоковой (частичной) загрузки —
+  # см. huggingface.co/datasets/Bisher/ASVspoof_2019_LA
+  huggingface_repo: "Bisher/ASVspoof_2019_LA"
+
+partial_download:
+  # Сколько файлов КАЖДОГО класса (bonafide/spoof) скачивать на каждый сплит.
+  # При среднем flac ~50-80 КБ, 50+50 на train/dev/eval — это единицы МБ, а не гигабайты.
+  n_per_class:
+    train: 50
+    dev: 50
+    eval: 30
+  # Куда сохранять частично скачанные данные (та же структура, что ждёт 02_eda.ipynb)
+  output_dir: "./data/raw"
+  seed: 42
+
 
 huggingface:
   # Зеркало HuggingFace Hub
@@ -33,9 +49,37 @@ audio:
   max_audio_files_preview: 3
 
 eda:
+  # Сколько файлов сканировать для оценки длительности (без полной декодизации, только заголовки)
   duration_sample_size: 300
+  # Сколько примеров каждого класса показывать на waveform/MFCC/мел-спектрограммах
   n_examples_per_class: 1
+  # Куда сохранить сводную таблицу протокола после парсинга
   protocol_table_path: "./data/processed/protocol_summary.csv"
+
+baseline_gmm:
+  # Общие параметры GMM-бэкенда (одинаковые для LFCC и CQCC пайплайнов)
+  n_components: 512
+  covariance_type: "diag"   # официальный бейзлайн ASVspoof использует диагональную ковариацию — это на порядки дешевле full
+  reg_covar: 1.0e-6
+  max_iter: 100
+  # Ограничения для экономии времени/памяти. null = без ограничения (использовать всё).
+  max_train_files_per_class: null
+  max_train_frames_per_class: 200000   # подвыборка кадров перед обучением GMM, чтобы не раздувать память
+  max_eval_files_per_class: null
+  lfcc:
+    n_fft: 512
+    hop_length: 160
+    win_length: 320
+    n_filters: 20
+    n_ceps: 20     # + delta + delta-delta => итог 60-мерный вектор (как в официальном бейзлайне)
+  cqcc:
+    # Сознательно облегчённая конфигурация (меньше бинов/октаву, чем в оригинальной статье)
+    # ради экономии вычислений. n_bins=90 — безопасный запас от границы Найквиста
+    # при sample_rate=16000 и bins_per_octave=12 (96 уже выходит за предел).
+    n_bins: 90
+    bins_per_octave: 12
+    hop_length: 160
+    n_ceps: 30     # + delta + delta-delta => итог 90-мерный вектор (как в официальном бейзлайне)
 
 training:
   batch_size: 32
