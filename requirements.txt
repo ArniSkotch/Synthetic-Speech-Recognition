@@ -17,8 +17,9 @@ librosa
 soundfile
 
 # ML / DL
-torch
-torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.14.0+cu126
+torchaudio==2.11.0+cu126
 transformers
 
 # Загрузка датасетов
