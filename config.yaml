@@ -18,6 +18,7 @@ dataset:
   kaggle_slug: "awsaf49/asvpoof-2019-dataset"
   download: true
   unzip: true
+  force_redownload: false
   # Parquet-зеркало на HuggingFace для потоковой (частичной) загрузки —
   # см. huggingface.co/datasets/Bisher/ASVspoof_2019_LA
   huggingface_repo: "Bisher/ASVspoof_2019_LA"
