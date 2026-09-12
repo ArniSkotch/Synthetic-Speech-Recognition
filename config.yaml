@@ -32,6 +32,11 @@ audio:
   duration_sec: 4.0
   max_audio_files_preview: 3
 
+eda:
+  duration_sample_size: 300
+  n_examples_per_class: 1
+  protocol_table_path: "./data/processed/protocol_summary.csv"
+
 training:
   batch_size: 32
   num_epochs: 20
